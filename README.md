@@ -8,19 +8,19 @@ Synchronous business logic meets asynchronicity in the cloud.
 
 ## Installation
 
-  npm install protologic --save
+    npm install protologic --save
 
 ## Usage
 
-  var protologic = require('protologic');
+    var protologic = require('protologic');
 
-  var login = new protologic({
-    name: 'Login'
-  });
+    var login = new protologic({
+        name: 'Login'
+    });
 
 ## Tests
 
-  npm test
+    npm test
 
 ## Contributing
 
