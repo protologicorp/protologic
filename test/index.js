@@ -41,6 +41,11 @@ describe('Protologic :: Setters', function() {
         expect(test).to.have.property('name').to.equal('Default');
     });
 
+    it('Should throw Error on blank name while setting logic name.', function() {
+
+        expect(function(){ test.setName(); }).to.throw('Name cannot be blank.');
+    });
+
     it('Should change name to "Shaft".', function() {
 
         test.setName('Shaft');
@@ -62,6 +67,11 @@ describe('Protologic :: Bins', function() {
         expect(test.bins).to.have.property('bin').with.lengthOf(0);
     });
 
+    it('Should throw Error on blank name while setting Bin name.', function() {
+
+        expect(function(){ test.addBin(); }).to.throw('Bin name must be a string.');
+    });
+
     it('Should allow for Bin to be added.', function() {
 
         test.addBin('userCredentials');
@@ -76,6 +86,16 @@ describe('Protologic :: Bins', function() {
         expect(bin).to.have.deep.property('name', 'userCredentials');
     });
 
+    it('Should throw Error on blank name while getting Bin name.', function() {
+
+        expect(function(){ test.getBin(); }).to.throw('Bin name must be a string.');
+    });
+
+    it('Should throw Error on blank parameters while setting Bin data.', function() {
+
+        expect(function(){ test.setBinData(); }).to.throw('Bin Data is invalid.');
+    });
+
     it('Should be able to set Data property of Bin named, "userCredentials".', function() {
 
         var data = { username: "Joe", password: "3498ufkjdnfjhscnd34rf" };
@@ -87,6 +107,11 @@ describe('Protologic :: Bins', function() {
 
         //var str = JSON.stringify(test, null, 2); // spacing level = 2
         //console.log(str);
+    });
+
+    it('Should throw Error on non-numeric index when removing Bin.', function() {
+
+        expect(function(){ test.removeBin('a'); }).to.throw('Bin Index must be a number.');
     });
 
     it('Should allow for Bin to be removed.', function() {

@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tjscooper/skymine.git"
+    "url": "https://github.com/protologicorp/protologic.git"
   },
   "keywords": [
     "SOP",
@@ -16,12 +16,12 @@
     "HotSOP",
     "Logic"
   ],
-  "author": "Tim Cooper <tjscooper@gmail.com> (https://github.com/tjscooper)",
+  "author": "Tim Cooper <tjscooper@gmail.com> (https://github.com/protologicorp)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tjscooper/skymine/issues"
+    "url": "https://github.com/tjscooper/protologicorp/issues"
   },
-  "homepage": "https://github.com/tjscooper/skymine",
+  "homepage": "https://github.com/tjscooper/protologic",
   "devDependencies": {
     "chai": "^2.2.0",
     "mocha": "^2.2.4",

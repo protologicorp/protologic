@@ -33,11 +33,11 @@ Protologic.prototype.getName = function(name) {
 };
 
 Protologic.prototype.setName = function(name) {
-    if(name !== "") {
+    if(name !== "" && name !== null && name !== undefined) {
         this.name = name;
     }
     else {
-        throw new Error ("Name cannot be blank.");
+        throw new ReferenceError("Name cannot be blank.");
     }
 };
 
@@ -59,7 +59,7 @@ Protologic.prototype.addBin = function(binName) {
         this.bins.add(binName);
     }
     else {
-        throw new Error ("Bin name must be a string.");
+        throw new ReferenceError ("Bin name must be a string.");
     }
 };
 
@@ -68,7 +68,7 @@ Protologic.prototype.getBin = function(binName) {
         return this.bins.get(binName);
     }
     else {
-        throw new Error ("Bin name must be a string.");
+        throw new ReferenceError ("Bin name must be a string.");
     }
 };
 
@@ -77,7 +77,7 @@ Protologic.prototype.setBinData = function(binName, data) {
         this.bins.setData(binName, data);
     }
     else {
-        throw new Error ("Bin Data in invalid.");
+        throw new ReferenceError ("Bin Data is invalid.");
     }
 };
 
@@ -86,7 +86,7 @@ Protologic.prototype.removeBin = function(index) {
         this.bins.remove(index);
     }
     else {
-        throw new Error ("Bin Index must be a number.");
+        throw new ReferenceError ("Bin Index must be a number.");
     }
 
 };
