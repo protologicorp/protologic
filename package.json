@@ -1,6 +1,6 @@
 {
   "name": "protologic",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Synchronous business logic meets asynchronicity in the cloud.",
   "main": "index.js",
   "scripts": {
