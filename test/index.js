@@ -1,7 +1,8 @@
 'use strict';
 
 var expect = require('chai').expect,
-    Protologic = require('../index');
+    Protologic = require('../index'),
+    loginCtrl = require('../demo-login-controller');
 
 describe('Protologic :: Init', function() {
 
@@ -142,9 +143,23 @@ describe('Protologic :: Levels', function() {
 
     it('Should allow for Level to be added.', function() {
 
-        test.addLevel();
+        test.addLevel('Authenticate');
 
         expect(test.levels).to.have.property('level').with.lengthOf(1);
+    });
+
+    it('Should allow Level Step to be added.', function() {
+
+        test.addLevelStep('Authenticate',
+            {
+                name: 'Get Credentials',
+                logic: loginCtrl.getLoginFormCredentials,
+                bin: 'userCredentials'
+            }
+        );
+
+        expect(test.levels).to.have.deep.property('level[0].steps').with.lengthOf(1);
+
     });
 
     it('Should allow for Level to be removed.', function() {
@@ -152,6 +167,57 @@ describe('Protologic :: Levels', function() {
         test.removeLevel();
 
         expect(test.levels).to.have.property('level').with.lengthOf(0);
+    });
+
+
+});
+
+describe('Protologic :: Steps', function() {
+
+    var test = new Protologic();
+    // Set up some Bins for storing Data
+    test.addBin('userCredentials');
+    test.addBin('userCredentialsValid', false);
+
+// Set Bin Data with Login Credentials
+    test.setBinData( 'userCredentials', // Name of Bin
+        {   username: 'Steve',           // Data object
+            password: 'Zissou'
+        }
+    );
+    test.addLevel('Authenticate');
+    test.addLevelStep('Authenticate',
+        {
+            name: 'Get Credentials',
+            logic: loginCtrl.getLoginFormCredentials,
+            bin: 'userCredentials'
+        }
+    );
+
+    it('Should contain a name.', function() {
+
+        test.addLevelStep('Authenticate',
+            {
+                name: 'Get Credentials',
+                logic: loginCtrl.getLoginFormCredentials,
+                bin: 'userCredentials'
+            }
+        );
+
+        expect(test.levels).to.have.deep.property('level[0].steps[0].name', 'Get Credentials');
+
+    });
+
+    it('Should contain a function.', function() {
+
+        expect(test.levels).to.have.deep.property('level[0].steps[0].logic').that.is.a('function');
+
+    });
+
+    it('Should contain a bin string.', function() {
+
+        expect(test.levels).to.have.deep.property('level[0].steps[0].bin').that.is.a('string');
+
     });
 
 

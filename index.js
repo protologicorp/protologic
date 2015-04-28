@@ -1,7 +1,8 @@
 'use strict';
 
 var Level   = require('./lib/level'),
-    Bin     = require('./lib/bin');
+    Bin     = require('./lib/bin'),
+    Engine  = require('./lib/engine');
 
 function Protologic (options) {
 
@@ -13,8 +14,6 @@ function Protologic (options) {
 
     self.bins   = new Bin();        // Will collect return results of Level Steps.
     self.levels = new Level();      // Will contain Process Steps.
-
-
 
 }
 
@@ -41,16 +40,6 @@ Protologic.prototype.setName = function(name) {
     }
 };
 
-
-Protologic.prototype.addLevel = function(levelData) {
-    var self = this;
-    this.levels.add(levelData);
-};
-
-Protologic.prototype.removeLevel = function(index) {
-    var self = this;
-    this.levels.remove(index);
-};
 
 // BINS
 
@@ -88,6 +77,39 @@ Protologic.prototype.removeBin = function(index) {
     else {
         throw new ReferenceError ("Bin Index must be a number.");
     }
+
+};
+
+// LEVELS
+
+
+Protologic.prototype.addLevel = function(name) {
+    var self = this;
+
+    if(typeof name === 'string') {
+        this.levels.add(name);
+    }
+    else {
+        throw new ReferenceError ("Level name must be a string.");
+    }
+};
+
+Protologic.prototype.addLevelStep = function(name, step) {
+    var self = this;
+    this.levels.addStep(name, step);
+};
+
+Protologic.prototype.removeLevel = function(index) {
+    var self = this;
+    this.levels.remove(index);
+};
+
+Protologic.prototype.run = function() {
+
+    var self = this,
+        engine = new Engine(self);
+
+    engine.run('Authenticate');
 
 };
 
