@@ -89,7 +89,7 @@ login.addLevelStep(
  */
 
 login.run();
-
-// Output Object
-var str = JSON.stringify(login, null, 2);
-console.log(str);
+//
+//// Output Object
+//var str = JSON.stringify(login, null, 2);
+//console.log(str);
