@@ -28,7 +28,7 @@ Protologic.prototype.init = function(options) {
     return options;
 };
 
-Protologic.prototype.getName = function(name) {
+Protologic.prototype.getName = function() {
     return this.name;
 };
 
@@ -54,9 +54,9 @@ Protologic.prototype.removeLevel = function(index) {
 
 // BINS
 
-Protologic.prototype.addBin = function(binName) {
+Protologic.prototype.addBin = function(binName, defaultValue) {
     if(typeof binName === 'string') {
-        this.bins.add(binName);
+        this.bins.add(binName, defaultValue);
     }
     else {
         throw new ReferenceError ("Bin name must be a string.");

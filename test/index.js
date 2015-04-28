@@ -72,11 +72,18 @@ describe('Protologic :: Bins', function() {
         expect(function(){ test.addBin(); }).to.throw('Bin name must be a string.');
     });
 
-    it('Should allow for Bin to be added.', function() {
+    it('Should allow for Bin to be added named, "userCredentials".', function() {
 
         test.addBin('userCredentials');
 
         expect(test.bins).to.have.deep.property('bin[0].name', 'userCredentials');
+    });
+
+    it('Should allow for Bin to be added named, "userCredentialsValid" with default value, "false".', function() {
+
+        test.addBin('userCredentialsValid', false);
+
+        expect(test.bins).to.have.deep.property('bin[1].data', false);
     });
 
     it('Should contain a Bin named, "userCredentials".', function() {
@@ -104,9 +111,6 @@ describe('Protologic :: Bins', function() {
         var bin = test.getBin('userCredentials');
 
         expect(bin).to.have.deep.property('data.username', 'Joe');
-
-        //var str = JSON.stringify(test, null, 2); // spacing level = 2
-        //console.log(str);
     });
 
     it('Should throw Error on non-numeric index when removing Bin.', function() {
@@ -118,7 +122,7 @@ describe('Protologic :: Bins', function() {
 
         test.removeBin(0);
 
-        expect(test.bins).to.have.property('bin').with.lengthOf(0);
+        expect(test.bins).to.have.property('bin').with.lengthOf(1);
     });
 
 
