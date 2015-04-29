@@ -22,8 +22,7 @@ some functions we'll use in our upcoming example.
         loginCtrl = require('./demo-login-controller');
 
 
-Next, we'll create a new logic process, or S.O.P. process that we'll
-assign a name, 'Login'.
+Next, we'll create a new logic process (or S.O.P. process) that we'll assign a name, 'Login'.
 
 
     // Login Process
@@ -37,24 +36,19 @@ assign a name, 'Login'.
 
 We create Bins to store data throughout the logical process.
 
-We'll define below the 'userCredentials' Bin for storing the initial form data, and also
-a Bin called, 'userCredentialsValid' for running a method that can confirm values are set, by
-default this Bin can accept a default 'false' value.
-
-Where we don't define a default value, the value is set to null.
-
-
-    // Set up some Bins for storing Data
+We'll mock a login form request body by creating a 'formData' Bin, then we'll define a 'userCredentials' Bin
+for storing the initial form data, and finally, a 'userCredentialsValid' Bin for running a method that will
+confirm our expected values were set. By default, all Bins recieve a null data value. Passing an object, boolean
+or string value along with the 'addBin' method will set the default value as desired.
 
     login.addBin('formData', { login: { username: 'Steve', password: 'Zissou' } } );
     login.addBin('userCredentials');
     login.addBin('userCredentialsValid', false);
 
 
-
 ### Levels
 
-Next, we'll set up a Levels to handle the various steps our logic will take.
+Now, we'll set up a Level to handle the various steps our logic will require.
 
 
     login.addLevel('Authenticate');
@@ -62,13 +56,10 @@ Next, we'll set up a Levels to handle the various steps our logic will take.
 
 ### Steps
 
-Next, we'll set up some levels to handle the various process and outcome paths the logic can take.
-
-We've created our first Level to handle login called 'Authenticate', now we'll pass it a Step using
-'addStep', we're telling the Level 'Authenticate' to hold the first in a series of Steps, which are
-named for convenience that include a function to run and a Bin to store the results.
-
-    // Add Steps to the Authenticate Level
+Since we've created our first Level to handle login called 'Authenticate', let's pass it a couple of
+Steps to be called in order using 'addStep'.  Here, we're telling the Level 'Authenticate' to hold a series of
+Steps (which are named for convenience) that include a function to run, a source of data, and a previously
+declared Bin to store the results.
 
     login.addStep(
         'Authenticate',                                     // Name of Level
@@ -91,20 +82,15 @@ named for convenience that include a function to run and a Bin to store the resu
 
 ### Run
 
-Now it's time to run the logic process.
+Now it's time to run the logic process.  The 'run' method will execute our 'Authenticate' Level, beginning with the
+first Step in the chain and storing its results in the specified Bin.
 
 
     login.run('Authenticate');
 
-
-# Resources
-
-### Object Structure
-
-Although you don't get to see the underlying structure, we can tell a lot about the process by
-reviewing the contents of each Bin after execution.
-
-You can see our 'userCredentials' were stored, and our validation function returned a successful message.
+Upon completion, if we examine the underlying Object Bins, we'll see the process used our 'formData' to set data in
+the 'userCredentials' Bin, then ran the validation method to place the resulting message in the 'userCredentialsValid'
+Bin.
 
     {
       "name": "Login",
@@ -132,28 +118,10 @@ You can see our 'userCredentials' were stored, and our validation function retur
           }
         ]
       },
-      "levels": {
-        "level": [
-          {
-            "name": "Authenticate",
-            "steps": [
-              {
-                "name": "Get Credentials",
-                "logic": [Function],
-                "data": "formData",
-                "bin": "userCredentials"
-              },
-              {
-                "name": "Validate Credentials",
-                "data": "userCredentials",
-                "logic": [Function],
-                "bin": "userCredentialsValid"
-              }
-            ]
-          }
-        ]
-      }
-    }
+      ...
+
+
+# Controller Framework
 
 ### Demo Login Controller
 
@@ -189,10 +157,12 @@ Below we can see the two functions used in the above example, and their use of t
 
     };
 
-module.exports = {
-    getLoginFormCredentials: getLoginFormCredentials,
-    validateUserCredentials: validateUserCredentials
-};
+    module.exports = {
+        getLoginFormCredentials: getLoginFormCredentials,
+        validateUserCredentials: validateUserCredentials
+    };
+
+
 
 
 ## Tests
