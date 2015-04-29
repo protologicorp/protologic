@@ -12,15 +12,8 @@ Synchronous business logic meets asynchronicity in the cloud.
 
 ## Usage
 
-    var protologic = require('protologic');
-
-    var login = new protologic({
-        name: 'Login'
-    });
-
-## Demo
-
 First we'll load the modules we need.
+
 * The Protologic Module.
 * A Login Controller (containing some functions we wish to call).
 
