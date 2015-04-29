@@ -22,6 +22,9 @@ login.setName('Login');
  *  a method that can confirm values are set, by
  *  default this Bin can accept a default 'false' value.
  *
+ *  We'll also create a 'formData' Bin to mock a posted
+ *  form request body.
+ *
  */
 
 // Set up some Bins for storing Data
