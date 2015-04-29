@@ -35,7 +35,7 @@ assign a name, 'Login'.
     login.setName('Login');
 
 
-# Bins
+### Bins
 
 We create Bins to store data throughout the logical process.
 
@@ -54,7 +54,7 @@ Where we don't define a default value, the value is set to null.
 
 
 
-# Levels
+### Levels
 
 Next, we'll set up a Levels to handle the various steps our logic will take.
 
@@ -62,7 +62,7 @@ Next, we'll set up a Levels to handle the various steps our logic will take.
     login.addLevel('Authenticate');
 
 
-# Steps
+### Steps
 
 Next, we'll set up some levels to handle the various process and outcome paths the logic can take.
 
@@ -91,7 +91,7 @@ named for convenience that include a function to run and a Bin to store the resu
     );
 
 
-# Run
+### Run
 
 Now it's time to run the logic process.
 
@@ -99,7 +99,7 @@ Now it's time to run the logic process.
     login.run('Authenticate');
 
 
-# Object Structure
+### Object Structure
 
 Although you don't get to see the underlying structure, we can tell a lot about the process by
 reviewing the contents of each Bin after execution.
