@@ -22,18 +22,6 @@ describe('Protologic :: Init', function() {
 
 });
 
-describe('Protologic :: Getters', function() {
-
-    it('Should return name equal to "Default".', function() {
-
-        var test = new Protologic();
-
-        expect(test.getName()).to.equal('Default');
-
-    });
-
-});
-
 describe('Protologic :: Setters', function() {
 
     var test = new Protologic();
@@ -47,11 +35,11 @@ describe('Protologic :: Setters', function() {
         expect(function(){ test.setName(); }).to.throw('Name cannot be blank.');
     });
 
-    it('Should change name to "Shaft".', function() {
+    it('Should change name to "Belafonte".', function() {
 
-        test.setName('Shaft');
+        test.setName('Belafonte');
 
-        expect(test).to.have.property('name').to.equal('Shaft');
+        expect(test).to.have.property('name').to.equal('Belafonte');
     });
 
 });
@@ -150,12 +138,15 @@ describe('Protologic :: Levels', function() {
 
     it('Should allow Level Step to be added.', function() {
 
-        test.addLevelStep('Authenticate',
-            {
-                name: 'Get Credentials',
-                logic: loginCtrl.getLoginFormCredentials,
-                bin: 'userCredentials'
-            }
+        test.addStep(
+            'Authenticate',
+            [
+                {
+                    name: 'Get Credentials',
+                    logic: loginCtrl.getLoginFormCredentials,
+                    bin: 'userCredentials'
+                }
+            ]
         );
 
         expect(test.levels).to.have.deep.property('level[0].steps').with.lengthOf(1);
@@ -176,33 +167,23 @@ describe('Protologic :: Steps', function() {
 
     var test = new Protologic();
     // Set up some Bins for storing Data
+    test.addBin('formData', { username: 'Steve', password: 'sfkjhsfjkshs8fhckjsbxss8csuhcsi' });
     test.addBin('userCredentials');
     test.addBin('userCredentialsValid', false);
 
-// Set Bin Data with Login Credentials
-    test.setBinData( 'userCredentials', // Name of Bin
-        {   username: 'Steve',           // Data object
-            password: 'Zissou'
-        }
-    );
+
     test.addLevel('Authenticate');
-    test.addLevelStep('Authenticate',
-        {
+    test.addStep('Authenticate',
+        [{
             name: 'Get Credentials',
             logic: loginCtrl.getLoginFormCredentials,
+            data: 'formData',
             bin: 'userCredentials'
-        }
+        }]
     );
 
     it('Should contain a name.', function() {
 
-        test.addLevelStep('Authenticate',
-            {
-                name: 'Get Credentials',
-                logic: loginCtrl.getLoginFormCredentials,
-                bin: 'userCredentials'
-            }
-        );
 
         expect(test.levels).to.have.deep.property('level[0].steps[0].name', 'Get Credentials');
 

@@ -1,7 +1,8 @@
 'use strict';
 
 var logic = require('./index'),
-    loginCtrl = require('./demo-login-controller');
+    loginCtrl = require('./demo-login-controller'),
+    Output  = require('./lib/output');
 
 // Login Process
 var login = new logic();
@@ -24,15 +25,11 @@ login.setName('Login');
  */
 
 // Set up some Bins for storing Data
-login.addBin('userCredentials');
+login.addBin('formData', { login: { username: 'Steve', password: 'Zissou' } } );
+login.addBin('userCredentials'); // value defaults to null
 login.addBin('userCredentialsValid', false);
 
 // Set Bin Data with Login Credentials
-login.setBinData( 'userCredentials', // Name of Bin
-    {   username: 'Steve',           // Data object
-        password: 'Zissou'
-    }
-);
 
 /* LEVELS **********************************************
  *
@@ -71,13 +68,22 @@ login.addLevel('AccessDenied');
 
 
 // Add Steps to the Authenticate Level
-login.addLevelStep(
+login.addStep(
     'Authenticate',                                 // Name of Level
-    {
-        name: 'Get Credentials',                    // Name of Step
-        logic: loginCtrl.getLoginFormCredentials,   // Function
-        bin: 'userCredentials'                      // Bin to store results
-    }
+    [
+        {
+            name: 'Get Credentials',                    // Name of Step
+            logic: loginCtrl.getLoginFormCredentials,   // Function
+            data: 'formData',                           // Data to use in Function
+            bin: 'userCredentials'                      // Bin to store results
+        },
+        {
+            name: 'Validate Credentials',               // Name of Step
+            logic: loginCtrl.validateUserCredentials,   // Function
+            data: 'userCredentials',                           // Data to use in Function
+            bin: 'userCredentialsValid'                      // Bin to store results
+        }
+    ]
 );
 
 /* RUN **********************************************
@@ -88,8 +94,7 @@ login.addLevelStep(
  *
  */
 
-login.run();
-//
-//// Output Object
-//var str = JSON.stringify(login, null, 2);
-//console.log(str);
+login.run('Authenticate');
+
+
+console.log(Output.pretty(login));
