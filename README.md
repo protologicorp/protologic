@@ -12,10 +12,8 @@ Synchronous business logic meets asynchronicity in the cloud.
 
 ## Usage
 
-First we'll load the modules we need.
-
-* The Protologic Module.
-* A Login Controller (containing some functions we wish to call).
+First we'll load the modules we need... The library itself, and a Login Controller containing
+some functions we'll use in our upcoming example.
 
 
     'use strict';
@@ -99,6 +97,8 @@ Now it's time to run the logic process.
     login.run('Authenticate');
 
 
+# Resources
+
 ### Object Structure
 
 Although you don't get to see the underlying structure, we can tell a lot about the process by
@@ -155,6 +155,44 @@ You can see our 'userCredentials' were stored, and our validation function retur
       }
     }
 
+### Demo Login Controller
+
+In order to work with Protologic, the controller stucture requires that each logical function
+take a data parameter (incoming data) and return a callback (outgoing results).
+
+Below we can see the two functions used in the above example, and their use of this requirement.
+
+    'use strict';
+
+
+    var getLoginFormCredentials = function(data, callback) {
+
+        var loginData = {
+            username: data.login.username !== "" ? data.login.username : null,
+            password: data.login.password !== "" ? data.login.password : null
+        };
+
+        callback({ success: true, results: loginData });
+
+    };
+
+    var validateUserCredentials = function (data, callback) {
+
+        // Success
+        if(data.username !== "" && data.password !== "") {
+            callback({ success: true, message: "User Credentials are valid." });
+        }
+        // Failure
+        else {
+            callback({ success: false, message: "User Credentials are invalid." });
+        }
+
+    };
+
+module.exports = {
+    getLoginFormCredentials: getLoginFormCredentials,
+    validateUserCredentials: validateUserCredentials
+};
 
 
 ## Tests
