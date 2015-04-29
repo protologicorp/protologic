@@ -20,11 +20,20 @@ Synchronous business logic meets asynchronicity in the cloud.
 
 ## Demo
 
+First we'll load the modules we need.
+* The Protologic Module.
+* A Login Controller (containing some functions we wish to call).
+
+
     'use strict';
 
-    var logic = require('./index'),
-        loginCtrl = require('./demo-login-controller'),
-        Output  = require('./lib/output');
+    var logic = require('protologic'),
+        loginCtrl = require('./demo-login-controller');
+
+
+Next, we'll create a new logic process, or S.O.P. process that we'll
+assign a name, 'Login'.
+
 
     // Login Process
     var login = new logic();
@@ -33,65 +42,45 @@ Synchronous business logic meets asynchronicity in the cloud.
     login.setName('Login');
 
 
-    /* BINS ************************************************
-     *
-     *  We create Bins to store data throughout the
-     *  logical process.
-     *
-     *  We'll define below the 'userCredentials' Bin
-     *  for storing the initial form data, and also
-     *  a Bin called, 'userCredentialsValid' for running
-     *  a method that can confirm values are set, by
-     *  default this Bin can accept a default 'false' value.
-     *
-     */
+# Bins
+
+We create Bins to store data throughout the logical process.
+
+We'll define below the 'userCredentials' Bin for storing the initial form data, and also
+a Bin called, 'userCredentialsValid' for running a method that can confirm values are set, by
+default this Bin can accept a default 'false' value.
+
+Where we don't define a default value, the value is set to null.
+
 
     // Set up some Bins for storing Data
+
     login.addBin('formData', { login: { username: 'Steve', password: 'Zissou' } } );
-    login.addBin('userCredentials'); // value defaults to null
+    login.addBin('userCredentials');
     login.addBin('userCredentialsValid', false);
 
-    // Set Bin Data with Login Credentials
 
-    /* LEVELS **********************************************
-     *
-     *  Next, we'll set up some levels to handle the various
-     *  process and outcome paths the logic can take.
-     *
-     *  We'll create our first Level to handle out login
-     *  and call it, 'Authenticate'.  Then we'll pass it
-     *  a Step.
-     *
-     *  Using 'addLevelStep', we tell the Level 'Authenticate'
-     *  to hold the first in a series of Steps, which are
-     *  named for convenience that include a function to run
-     *  and a Bin to store the results.
-     *
-     */
+
+# Levels
+
+Next, we'll set up a Levels to handle the various steps our logic will take.
+
 
     login.addLevel('Authenticate');
-    login.addLevel('AccessGranted');
-    login.addLevel('AccessDenied');
 
 
-    /* STEPS **********************************************
-     *
-     *  Next, we'll set up some levels to handle the various
-     *  process and outcome paths the logic can take.
-     *
-     *  We've created our first Level to handle login called
-     *  'Authenticate', now we'll pass it a Step using
-     *  'addLevelStep', we're telling the Level 'Authenticate'
-     *  to hold the first in a series of Steps, which are
-     *  named for convenience that include a function to run
-     *  and a Bin to store the results.
-     *
-     */
+# Steps
 
+Next, we'll set up some levels to handle the various process and outcome paths the logic can take.
+
+We've created our first Level to handle login called 'Authenticate', now we'll pass it a Step using
+'addStep', we're telling the Level 'Authenticate' to hold the first in a series of Steps, which are
+named for convenience that include a function to run and a Bin to store the results.
 
     // Add Steps to the Authenticate Level
+
     login.addStep(
-        'Authenticate',                                 // Name of Level
+        'Authenticate',                                     // Name of Level
         [
             {
                 name: 'Get Credentials',                    // Name of Step
@@ -102,21 +91,77 @@ Synchronous business logic meets asynchronicity in the cloud.
             {
                 name: 'Validate Credentials',               // Name of Step
                 logic: loginCtrl.validateUserCredentials,   // Function
-                data: 'userCredentials',                           // Data to use in Function
-                bin: 'userCredentialsValid'                      // Bin to store results
+                data: 'userCredentials',                    // Data to use in Function
+                bin: 'userCredentialsValid'                 // Bin to store results
             }
         ]
     );
 
-    /* RUN **********************************************
-     *
-     *  Now it's time to run the logic process...
-     *
-     *
-     *
-     */
+
+# Run
+
+Now it's time to run the logic process.
+
 
     login.run('Authenticate');
+
+
+# Object Structure
+
+Although you don't get to see the underlying structure, we can tell a lot about the process by
+reviewing the contents of each Bin after execution.
+
+You can see our 'userCredentials' were stored, and our validation function returned a successful message.
+
+    {
+      "name": "Login",
+      "bins": {
+        "bin": [
+          {
+            "name": "formData",
+            "data": {
+              "login": {
+                "username": "Steve",
+                "password": "Zissou"
+              }
+            }
+          },
+          {
+            "name": "userCredentials",
+            "data": {
+              "username": "Steve",
+              "password": "Zissou"
+            }
+          },
+          {
+            "name": "userCredentialsValid",
+            "data": "User Credentials are valid."
+          }
+        ]
+      },
+      "levels": {
+        "level": [
+          {
+            "name": "Authenticate",
+            "steps": [
+              {
+                "name": "Get Credentials",
+                "logic": [Function],
+                "data": "formData",
+                "bin": "userCredentials"
+              },
+              {
+                "name": "Validate Credentials",
+                "data": "userCredentials",
+                "logic": [Function],
+                "bin": "userCredentialsValid"
+              }
+            ]
+          }
+        ]
+      }
+    }
+
 
 
 ## Tests
